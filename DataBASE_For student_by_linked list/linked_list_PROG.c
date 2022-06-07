@@ -3,13 +3,12 @@
 #include<stdlib.h>
 #include"linked_list_config.h"
 
-
+u32 u32Index=0;
 
 struct SStudent_FILE *SGPFirstElement=NULL;
 void file_ViodData(struct SStudent_FILE* SPNewFile){
 		
-		DPRINTF(" enter name of student ");
-		printf("\n");
+		printf("enter name of student ");
 		scanf("%s",SPNewFile->SData_NestedS.name);
 		
 		DPRINTF("\n enter ID  ");
@@ -18,6 +17,8 @@ void file_ViodData(struct SStudent_FILE* SPNewFile){
 		scanf("%d",&SPNewFile->SData_NestedS.u32TotalDegree);
 		DPRINTF("\n enter Hight:   ");
 		scanf("%d",&SPNewFile->SData_NestedS.u8Hight);
+		u32Index++;
+		SPNewFile->u32File_Index=u32Index;
 		
 		
 	} 
@@ -87,11 +88,11 @@ void ViewAll_voidList(){
 	else{
 	while(PCurrent_Element){
 		printf("\n A number in list %d",u8Counter);
-		printf("\n ID is %d",PCurrent_Element->SData_NestedS.ID);
-		printf("\n name is %s",PCurrent_Element->SData_NestedS.name);
-		printf("\n Dgree  is %d",PCurrent_Element->SData_NestedS.u32TotalDegree);
-		printf("\n hight   is %d",PCurrent_Element->SData_NestedS.u8Hight);
-	
+		printf("\n ID=====> %d",PCurrent_Element->SData_NestedS.ID);
+		printf("\n name===> %s",PCurrent_Element->SData_NestedS.name);
+		printf("\n Dgree==>%d",PCurrent_Element->SData_NestedS.u32TotalDegree);
+		printf("\n hight=> %d",PCurrent_Element->SData_NestedS.u8Hight);
+	u8Counter++;
 		PCurrent_Element=PCurrent_Element->PSNextData;
 	}
 	}
@@ -100,13 +101,197 @@ void ViewAll_voidList(){
 
 void DeleteVoid_All(){
 	struct SStudent_FILE* PCurrent_Element=SGPFirstElement;
-	if(PCurrent_Element)
-	DPRINTF("Student list is empty ");
+	struct SStudent_FILE* PCurrent1_Element=SGPFirstElement->PSNextData;
+	if(PCurrent_Element){
     while(PCurrent_Element){
+		PCurrent1_Element=PCurrent_Element;
+			free(PCurrent_Element);
 		PCurrent_Element=PCurrent_Element->PSNextData;
-		free(PCurrent_Element);
+	PCurrent1_Element=PCurrent1_Element->PSNextData;
 		
+	}
+	DPRINTF("Student list is empty ");
+	}
+	else {
+		
+		printf("list alrady is empty ");
 	}
 	
 	
 }
+
+
+
+u8 Nth_node(u32 Number_Element){
+	struct SStudent_FILE* SCurrent_File=SGPFirstElement;
+	
+	if(SGPFirstElement)/*chack empty*/
+	{
+		while(SCurrent_File)
+		{
+			if(SCurrent_File->u32File_Index==Number_Element){
+				
+		printf("\n ID is %d",SCurrent_File->SData_NestedS.ID);
+		printf("\n name is %s",SCurrent_File->SData_NestedS.name);
+		printf("\n Dgree  is %d",SCurrent_File->SData_NestedS.u32TotalDegree);
+		printf("\n hight   is %d",SCurrent_File->SData_NestedS.u8Hight);
+				
+				return 1;
+			}
+			
+			else 
+				SCurrent_File=SCurrent_File->PSNextData;
+				
+			
+		}
+		
+	}
+	
+	else printf("there are not files");
+	return 0;
+	
+}
+
+u8 Count_voidlist(){
+	struct SStudent_FILE* PCurrent_Node=SGPFirstElement;
+	u16 u16Counter=0;
+	if(PCurrent_Node)
+	{
+		while(PCurrent_Node){
+			 u16Counter++;
+		PCurrent_Node=PCurrent_Node->PSNextData;
+		
+	}
+	printf("number of nodes is equal=====> %d FILES", u16Counter);
+	return 1;
+}
+	else{
+		printf("there are not nodes!!!");
+		return 0;
+	}
+	
+}
+
+
+u8 GetNumber_u8ReversNode(u32 u32NodeNumber){
+	struct SStudent_FILE* PCurrent_LNode=SGPFirstElement;
+	struct SStudent_FILE* SPPriv=SGPFirstElement;
+	u32 u32Counter=1;
+	while(PCurrent_LNode->PSNextData){
+		PCurrent_LNode=PCurrent_LNode->PSNextData;
+		
+		u32Counter++;
+	}
+	
+	
+	while(SPPriv){
+		SPPriv->u32File_Index=u32Counter;
+		SPPriv=SPPriv->PSNextData;
+		u32Counter--;
+		
+	}
+	
+	
+	SPPriv=SGPFirstElement;
+	while(SPPriv)
+	{
+	
+		
+	   if(SPPriv->u32File_Index==u32NodeNumber){
+		printf("\n ID is %d",SPPriv->SData_NestedS.ID);
+		printf("\n name is %s",SPPriv->SData_NestedS.name);
+		printf("\n Dgree  is %d",SPPriv->SData_NestedS.u32TotalDegree);
+		printf("\n hight   is %d",SPPriv->SData_NestedS.u8Hight);
+		return 1;
+	   }
+	 SPPriv=SPPriv->PSNextData;
+}
+printf("this index does not exist ");
+return 0;
+}
+
+
+u8 Get_MiddelElement(void){
+	
+	struct SStudent_FILE* PCurrent_LNode=SGPFirstElement;
+	
+	u32 u32Counter=1;
+	u32 u32Avg1,u32Avg2;
+	
+	if(SGPFirstElement!=NULL){
+	while(PCurrent_LNode->PSNextData){
+		PCurrent_LNode=PCurrent_LNode->PSNextData;
+		
+		u32Counter++;
+	}
+	if(u32Counter&1) /*Odd Number*/{
+	u32Avg1=(u32Counter+1)/2;
+	printf("element is =====\n");
+	GetNumber_u8ReversNode(u32Avg1);
+	return 2;
+	}
+	else
+	{
+		u32Avg1=u32Counter/2;
+		u32Avg2=u32Avg1+1;
+		printf("meddel elements are two ");
+		printf("first one is ====\n");
+		GetNumber_u8ReversNode(u32Avg1);
+		printf("second one is ====\n");
+		GetNumber_u8ReversNode(u32Avg2);
+		return 1;
+	}
+	}
+	
+	printf("DATA BASE IS EMPTY !!!");
+	return 0;
+	
+}
+
+/*
+void GtVoid_ReversNodes(){
+	
+	struct SStudent_FILE* PSteprev=SGPFirstElement; 
+	PSteprev->PSNextData=NULL;
+	struct SStudent_FILE* PStepCurrent=SGPFirstElement->PSNextData; 
+	struct SStudent_FILE* PstepNext=PStepCurrent->PSNextData;
+	PSteprev->PSNextData=NULL; 
+	while(PstepNext->PSNextData)
+	{
+		
+		PstepNext->PSNextData=PStepCurrent;
+		PStepCurrent->PSNextData=PSteprev;
+		
+	
+		PSteprev+=3;
+		PStepCurrent+=3;
+		PstepNext+=3;
+		
+		
+	}
+	
+	PstepNext=SGPFirstElement;
+	 ViewAll_voidList();
+}
+*/
+void Gt1Void_ReversNodes(){
+	
+	struct SStudent_FILE* Pprevious=SGPFirstElement; /*point to first node in linkedlist*/
+	struct SStudent_FILE* Phead=SGPFirstElement;   /*point to first node in linkedlist*/
+	struct SStudent_FILE* Pcurrent=SGPFirstElement->PSNextData; /*point to second node */
+	struct SStudent_FILE* PNext;          
+			Pprevious->PSNextData=NULL; 
+	
+	while(Pcurrent){
+	PNext=Pcurrent->PSNextData;
+	Pcurrent->PSNextData=Pprevious;
+	Pprevious=Pcurrent;
+	Pcurrent=PNext;
+	
+}
+SGPFirstElement=Pprevious;
+
+ ViewAll_voidList();
+}
+
+
